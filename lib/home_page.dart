@@ -14,6 +14,7 @@ class _HomePageState extends State<HomePage> {
     databaseReference = FirebaseDatabase.instance.reference();
 
     DataSnapshot dataSnapshot = await databaseReference.once();
+    print(dataSnapshot.value);
 
     return dataSnapshot.value;
   }
@@ -26,7 +27,8 @@ class _HomePageState extends State<HomePage> {
         future: getSensorValue(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            print(snapshot.data);
+            print(snapshot.data['slot4']);
+
             return Column(
               children: [
                 Expanded(
@@ -34,13 +36,13 @@ class _HomePageState extends State<HomePage> {
                   children: [
                     Expanded(
                         child: ParkingSpot(
-                      color: snapshot.data["spot1"] == 1
+                      color: snapshot.data["slot1"] != '1'
                           ? Colors.green
                           : Colors.red,
                     )),
                     Expanded(
                         child: ParkingSpot(
-                      color: snapshot.data["spot2"] == 1
+                      color: snapshot.data["slot2"] != '1'
                           ? Colors.green
                           : Colors.red,
                     )),
@@ -51,27 +53,36 @@ class _HomePageState extends State<HomePage> {
                   children: [
                     Expanded(
                         child: ParkingSpot(
-                      color: snapshot.data["spot3"] == 1
+                      color: snapshot.data["slot3"] != '1'
                           ? Colors.green
                           : Colors.red,
                     )),
                     Expanded(
-                        child: ParkingSpot(
-                      color: snapshot.data["spot4"] == 1
-                          ? Colors.green
-                          : Colors.red,
+                        child: Container(
+                      margin: EdgeInsets.all(15.0),
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10.0),
+                          color: snapshot.data["slot4"] != '1'
+                              ? Colors.green
+                              : Colors.red),
                     )),
                   ],
                 )),
-                Container(
-                  child: Center(
-                    child: Text(
-                      'Refresh',
-                      style: TextStyle(color: Colors.black, fontSize: 27.0),
+                RaisedButton(
+                  onPressed: () {
+                    print(snapshot.data["slot2"]);
+                    setState(() {});
+                  },
+                  child: Container(
+                    child: Center(
+                      child: Text(
+                        'Refresh',
+                        style: TextStyle(color: Colors.black, fontSize: 27.0),
+                      ),
                     ),
+                    height: 100.0,
+                    color: Colors.white,
                   ),
-                  height: 100.0,
-                  color: Colors.white,
                 ),
               ],
             );
