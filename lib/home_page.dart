@@ -14,9 +14,6 @@ class _HomePageState extends State<HomePage> {
     databaseReference = FirebaseDatabase.instance.reference();
 
     DataSnapshot dataSnapshot = await databaseReference.once();
-    // print(dataSnapshot.value);
-
-    print(dataSnapshot.value["12121212"]);
 
     return dataSnapshot.value;
   }
@@ -30,27 +27,54 @@ class _HomePageState extends State<HomePage> {
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             print(snapshot.data);
-            return Center(
-              child: Container(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
+            return Column(
+              children: [
+                Expanded(
+                    child: Row(
                   children: [
-                    Text(
-                      "Slot 1: " + snapshot.data["slot1"],
-                      style: TextStyle(fontSize: 24),
-                    ),
-                    Text(
-                      "Slot 2: " + snapshot.data["slot2"],
-                      style: TextStyle(fontSize: 24),
-                    ),
-                    Text(
-                      "Slot 3: " + snapshot.data["slot3"],
-                      style: TextStyle(fontSize: 24),
-                    ),
+                    Expanded(
+                        child: ParkingSpot(
+                      color: snapshot.data["spot1"] == 1
+                          ? Colors.green
+                          : Colors.red,
+                    )),
+                    Expanded(
+                        child: ParkingSpot(
+                      color: snapshot.data["spot2"] == 1
+                          ? Colors.green
+                          : Colors.red,
+                    )),
                   ],
+                )),
+                Expanded(
+                    child: Row(
+                  children: [
+                    Expanded(
+                        child: ParkingSpot(
+                      color: snapshot.data["spot3"] == 1
+                          ? Colors.green
+                          : Colors.red,
+                    )),
+                    Expanded(
+                        child: ParkingSpot(
+                      color: snapshot.data["spot4"] == 1
+                          ? Colors.green
+                          : Colors.red,
+                    )),
+                  ],
+                )),
+                Container(
+                  child: Center(
+                    child: Text(
+                      'Refresh',
+                      style: TextStyle(color: Colors.black, fontSize: 27.0),
+                    ),
+                  ),
+                  height: 100.0,
+                  color: Colors.white,
                 ),
-              ),
-            ); // Add your Custom Widget of Column, Rows here.
+              ],
+            );
           }
           return Center(
             child: SizedBox(
@@ -61,6 +85,20 @@ class _HomePageState extends State<HomePage> {
           );
         },
       ),
+    );
+  }
+}
+
+class ParkingSpot extends StatelessWidget {
+  final Color color;
+  ParkingSpot({this.color});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.all(15.0),
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10.0), color: color),
     );
   }
 }
